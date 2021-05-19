@@ -1,16 +1,14 @@
-const http = require('http');
-const express = require('express');
-const bodyParser = require('body-parser');
-const route = require('./routes');
-const app = express();
+var http = require('http'),
+    fs = require('fs');
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use('/test',route);
 
-app.use((req, res,next)=>{
-   res.status(404).send('<h1> Page not found </h1>');
+fs.readFile('./index.md', function (err, html) {
+    if (err) {
+        throw err; 
+    }       
+    http.createServer(function(request, response) {  
+        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        response.end();  
+    }).listen(8000);
 });
-
-const port = 8080;
-const server = http.createServer(app);
-app.listen(port);
