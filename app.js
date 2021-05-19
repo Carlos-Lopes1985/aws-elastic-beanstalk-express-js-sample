@@ -1,8 +1,16 @@
+const http = require('http');
 const express = require('express');
+const bodyParser = require('body-parser');
+const route = require('./routes');
 const app = express();
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use('/test',route);
+
+app.use((req, res,next)=>{
+   res.status(404).send('<h1> Page not found </h1>');
+});
+
 const port = 8080;
-
-app.get('/', (req, res) => res.send('index.md'));
-
+const server = http.createServer(app);
 app.listen(port);
-console.log(`App running on http://localhost:${port}`);
